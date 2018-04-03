@@ -1,5 +1,0 @@
-Program Description :
-- this is a Non-Repeat Random Integer generator program for a bingo-card game prototype.
-
-Languages :
-- Javascript , HTML , CSS
