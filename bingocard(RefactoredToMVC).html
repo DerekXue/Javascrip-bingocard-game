@@ -1,0 +1,201 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js">
+</script>
+	<title>Single Random Number</title> <!-- set the page title to a string -->
+</head>
+<body>
+<h1 class="heading">Single Random Number Bingo Card</h1> <!-- define a h1 title set with a string-->
+<table align="center" style="font-size: 400%"> <!-- define a table area-->
+<thead> <!-- define table head-->
+	<tr> <!-- define table row with header cells-->
+		<th style="color: #6699ff">B</th>
+		<th style="color: #ff99ff">I</th>
+		<th style="color: #6699ff">N</th>
+		<th style="color: #f9d506">G</th>
+		<th style="color: #ff99ff">O</th>
+	</tr>
+</thead>
+
+<tbody id="wholearea"> <!-- define table body-->
+	<tr> <!-- define table row contains table data cells with id and onclick toggle color event and class property-->
+		<td id="square0" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square5" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square10" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square14" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square19" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+	</tr>
+	<tr>
+		<td id="square1" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square6" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square11" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square15" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square20" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+	</tr>
+	<tr>
+		<td id="square2" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square7" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="free">&#10024;</td>
+		<td id="square16" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square21" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+	</tr>
+	<tr>
+		<td id="square3" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square8" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square12" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square17" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square22" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+	</tr>
+	<tr>
+		<td id="square4" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square9" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square13" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square18" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+		<td id="square23" onclick="controller.colorToggle(id)" class="numbers">&nbsp;</td>
+	</tr>
+</tbody>
+
+</table>
+
+<p style="text-align:center;">
+ <BUTTON onclick="controller.display()" class="button1">Generate</BUTTON> <!-- set a button with onclick event -->
+ <BUTTON onclick="controller.reload()" class="button2">Reload</BUTTON> <!-- set a button with onclick event -->
+</p>
+ 
+<script>
+
+var model ={ 
+	getRandNum:function(baseValue){
+		return baseValue+Math.floor(Math.random()*16)+1; <!-- declear model contains function to generate random numbers base on base number-->
+	}
+}
+
+var controller={ 
+	display:function(){ <!-- declear controller contains function to get non-reapted randon number algorithm-->
+		var flag=false; <!-- initiate a flag to false-->
+		var flagArray=new Array(79); <!-- declear a array length of 79 elements-->
+		var valueArray=new Array(24); <!-- declear a array length of 24 elements-->
+		for(i=0;i<5;i++){
+		 	valueArray[i]=model.getRandNum(0); <!-- loop through the value array and assign each element a random number base on each column-->
+		}
+		for(i=5;i<10;i++){
+		 	valueArray[i]=model.getRandNum(16); <!-- loop through the value array and assign each element a random number base on each column-->
+		}
+		for(i=10;i<14;i++){
+		 	valueArray[i]=model.getRandNum(29); <!-- loop through the value array and assign each element a random number base on each column-->
+		}
+		for(i=14;i<19;i++){
+		 	valueArray[i]=model.getRandNum(45); <!-- loop through the value array and assign each element a random number base on each column-->
+		}
+		for(i=19;i<24;i++){
+		 	valueArray[i]=model.getRandNum(62); <!-- loop through the value array and assign each element a random number base on each column-->
+		}		
+		for(i=0;i<valueArray.length;i++){ <!-- loop through value array , using each element value as index to visit flag array -->
+			if(flagArray[valueArray[i]]==null) flagArray[valueArray[i]]=1; <!-- if the corresponding element in flag array didn't initialize , initialize it as 1-->
+			else flag=true; <!-- if the corresponding element in flag array did initialized , set flag to true which means there is a repeated number in value array-->
+		}
+
+		if(flag==true) controller.display(); <!-- if flag is true , re-run this function -->
+		else {
+			for(i=0;i<24;i++){
+				view.setNum(i,valueArray[i]); <!-- if flag is false , update UI-->
+				view.setColor(i,"black"); <!-- set each cell color to black when every new generate -->
+			}
+		}
+	},
+
+	reload:function(){ <!-- declear a reload function in controller-->
+		for(i=0;i<24;i++){ <!-- set value of each cell to 0 and color to black-->
+			view.setNum(i,0);
+			view.setColor(i,"black"); 
+		}
+	},
+
+	colorToggle:function(id){ <!-- declear a toggle color function in controller-->
+		var element =document.getElementById(id); <!-- get each element by id-->
+		if(element.style.color=="red") {view.setToggleColor(id,"black");} <!-- if the element color currently is red , change black-->
+		else {view.setToggleColor(id,"red");} <!-- else change it to red-->
+	}
+	
+}
+
+var view={ 
+	setNum:function(i,randNum){
+		document.getElementById("square"+i).innerHTML=randNum; <!-- declear view contains function to up date cell number in UI-->
+	},
+	setColor:function(i,color){
+		document.getElementById("square"+i).style.color=color; <!-- declear set cell color function in view-->
+	},
+	setToggleColor:function(i,color){
+		document.getElementById(i).style.color=color; <!-- declear toggle cell color function in view-->
+	}
+	
+}
+
+</script>
+
+<style> /* set HTML element style to make the application looks colorful */
+.button1 {
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button1:hover {background-color: #3e8e41}
+
+.button1:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+/* for button1 */
+
+.button2 {
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #ff3333;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button2:hover {background-color: #cc0000}
+
+.button2:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+/* for button2 */
+
+.numbers {
+	border-style: solid; 
+	text-shadow: 2px 2px 5px #ccccb3;
+	background-color: #ffb380
+}
+/* for numbers */
+
+.heading{
+	text-align: center; 
+	font-size: 400%;
+	text-shadow: 2px 2px 20px white;
+	background-color: #ff6600
+}
+/* for heading */
+
+</style>
+
+
+</body>
+</html>
